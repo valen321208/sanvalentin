@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>San Valentín ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    color: white;
+    overflow: hidden;
+    background: black;
+}
+
+.fondo {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.5);
+}
+
+.contenido {
+    margin-top: 60px;
+}
+
+.nombre {
+    font-size: 12vw;
+    font-weight: bold;
+    border-right: 3px solid white;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 6vw;
+}
+
+#countdown {
+    font-size: 5vw;
+    margin-top: 20px;
+}
+
+button {
+    padding: 14px 28px;
+    font-size: 18px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 15px;
+    width: 150px;
+}
+
+.yes {
+    background-color: white;
+    color: #ff4e50;
+}
+
+.no {
+    background-color: #333;
+    color: white;
+}
+
+.corazon {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* Flotar */
+.flotar {
+    animation: flotar 5s linear infinite;
+}
+
+@keyframes flotar {
+    0% {transform: translateY(100vh); opacity: 1;}
+    100% {transform: translateY(-10vh); opacity: 0;}
+}
+
+/* Explosión */
+@keyframes explotar {
+    0% {transform: scale(1); opacity: 1;}
+    100% {transform: translate(var(--x), var(--y)) scale(0); opacity: 0;}
+}
+</style>
+</head>
+
+<body>
+
+<img src="foto.jpg" class="fondo">
+
+<div class="contenido" id="contenido">
+    <div class="nombre" id="nombre"></div>
+    <h1>¿Querés ser mi San Valentín?</h1>
+    <div id="countdown"></div>
+    <button class="yes" onclick="acepto()">Sí ❤️</button>
+    <button class="no" onclick="noAceptar()">No 😅</button>
+</div>
+
+<script>
+
+/* Máquina de escribir */
+const texto = "VIOLETA ❤️";
+let i = 0;
+function escribir() {
+    if (i < texto.length) {
+        document.getElementById("nombre").innerHTML += texto.charAt(i);
+        i++;
+        setTimeout(escribir, 100);
+    }
+}
+escribir();
+
+/* Cuenta regresiva */
+const fecha = new Date("Feb 14, 2026 00:00:00").getTime();
+
+setInterval(function() {
+  const ahora = new Date().getTime();
+  const distancia = fecha - ahora;
+
+  const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+  const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+  document.getElementById("countdown").innerHTML =
+  "Faltan " + dias + "d " + horas + "h " + minutos + "m " + segundos + "s ❤️";
+}, 1000);
+
+/* Botón Sí */
+function acepto() {
+
+    /* Vibración (funciona en Safari iPhone) */
+    if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200]);
+    }
+
+    explotarCorazones();
+
+    document.getElementById("contenido").innerHTML =
+    "<h1 style='font-size:7vw'>💘 Sabía que ibas a decir que sí 💘<br><br>Quiero que sepas que te amo mucho y te pienso todo el día ❤️<br><br>Sos el amor de mi vida y me encanta poder mejorar tus días 🫶🏻</h1>";
+}
+
+/* Explosión */
+function explotarCorazones() {
+    for (let j = 0; j < 50; j++) {
+        const corazon = document.createElement("div");
+        corazon.innerHTML = "❤️";
+        corazon.classList.add("corazon");
+        corazon.style.left = "50%";
+        corazon.style.top = "50%";
+        corazon.style.fontSize = Math.random() * 25 + 20 + "px";
+
+        const x = (Math.random() - 0.5) * 600 + "px";
+        const y = (Math.random() - 0.5) * 600 + "px";
+
+        corazon.style.setProperty("--x", x);
+        corazon.style.setProperty("--y", y);
+        corazon.style.animation = "explotar 1.2s forwards";
+
+        document.body.appendChild(corazon);
+
+        setTimeout(() => {
+            corazon.remove();
+        }, 1200);
+    }
+}
+
+/* Botón No */
+function noAceptar() {
+    alert("Intentemos de nuevo 😌");
+    location.reload();
+}
+
+/* Corazones flotando */
+function crearCorazon() {
+    const corazon = document.createElement("div");
+    corazon.classList.add("corazon", "flotar");
+    corazon.innerHTML = "❤️";
+    corazon.style.left = Math.random() * 100 + "vw";
+    corazon.style.fontSize = Math.random() * 20 + 15 + "px";
+    document.body.appendChild(corazon);
+
+    setTimeout(() => {
+        corazon.remove();
+    }, 5000);
+}
+
+setInterval(crearCorazon, 400);
+
+</script>
+
+</body>
+</html>
